@@ -1,0 +1,52 @@
+{
+  "name": "hopvote",
+  "version": "1.0.0",
+  "description": "Live polls, quizzes, word clouds and Q&A by QR code",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/Hopvote/hopvote#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hopvote/hopvote.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hopvote/hopvote/issues"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "vite",
+    "build": "tsc --noEmit -p . && node scripts/check-css.mjs && vite build",
+    "preview": "vite preview",
+    "deploy": "node scripts/setup.mjs --deploy && npm run build && wrangler d1 migrations apply hopvote-db --remote && wrangler deploy",
+    "check": "tsc --noEmit -p . && node scripts/check-css.mjs && node scripts/check-i18n.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "test": "node scripts/run-tests.mjs",
+    "test:browser": "node scripts/presenter-lang-test.mjs && node scripts/stage-check.mjs && node scripts/brand-check.mjs",
+    "e2e": "node scripts/e2e.mjs",
+    "previews": "node scripts/previews.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^1.48.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.62.0",
+    "@cloudflare/workers-types": "^5.20260929.1",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "esbuild": "^0.28.1",
+    "pngjs": "^5.0.0",
+    "puppeteer-core": "^25.12.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "wrangler": "^4.143.0"
+  }
+}

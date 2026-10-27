@@ -1,0 +1,14 @@
+node_modules
+dist
+.wrangler
+.dev.vars
+.DS_Store
+*.local.md
+.cache/
+public/previews/
+# Your own settings: npm run setup makes them from the examples.
+wrangler.jsonc
+.env
+.env.*
+!.env.example
+tsconfig.tsbuildinfo

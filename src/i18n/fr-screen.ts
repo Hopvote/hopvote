@@ -1,0 +1,58 @@
+// French for the big screen's newer strings (src/pages/Present.tsx, src/pages/Lobby.tsx, the shared result views).
+// The big screen speaks the presentation's language: see src/screen-i18n.ts. Older screen strings live in fr-account.ts.
+export const FR_SCREEN: Record<string, string> = {
+  "Upvote this question": "Voter pour cette question",
+  "{n} seconds": "{n} secondes",
+  // The final podium of a quiz (src/podium.tsx).
+  "Final ranking": "Classement final",
+  // Builder hint under "Language" (src/pages/Create.tsx): this language now sets the big screen too.
+  "Screen and translations": "Écran et traductions",
+  // Kinds of questions in the big screen's header row (the others are named in fr-builder.ts and fr-types.ts).
+  "Rating": "Note",
+  "Ranking": "Classement",
+  "Prioritize": "Priorisation",
+  "Slide": "Diapositive",
+  "Timer": "Minuteur",
+  // The presenter's keyboard shortcuts list ("?" on the big screen, src/pages/Present.tsx).
+  "Keyboard shortcuts (?)": "Raccourcis clavier (?)",
+  "Keyboard shortcuts": "Raccourcis clavier",
+  "Next step": "Étape suivante",
+  "Previous step": "Étape précédente",
+  "Pause or resume voting": "Mettre en pause ou reprendre les votes",
+  "Show or hide the right answer": "Afficher ou masquer la bonne réponse",
+  "Spin the wheel or start the timer": "Lancer la roue ou le minuteur",
+  "Show or hide the QR code": "Afficher ou masquer le QR code",
+  "Show or hide this list": "Afficher ou masquer cette liste",
+  "Click a word in the cloud to remove it": "Cliquez sur un mot du nuage pour le retirer",
+  "Point at an answer, then click the eye to hide it": "Survolez une réponse, puis cliquez sur l'œil pour la masquer",
+  "Shortcut: Q": "Raccourci : Q",
+  // Topic rounds (src/rounds.ts) on the big screen and the shared views.
+  "1 topic on the wheel": "1 thème sur la roue",
+  "{n} topics on the wheel": "{n} thèmes sur la roue",
+  "Already played": "Déjà joué",
+  "Round {n}": "Manche {n}",
+  "Round {n} of {m}": "Manche {n} sur {m}",
+  "Last round": "Dernière manche",
+  "1 question": "1 question",
+  "Tie: drawn at random": "Égalité : tiré au sort",
+  "No votes: drawn at random": "Aucun vote : tiré au sort",
+  "Round started": "Manche commencée",
+  "The room chose": "La salle a choisi",
+  "Played": "Joué",
+  "Vote sent": "Vote envoyé",
+  "After round {n}": "Après la manche {n}",
+  "Close the vote": "Clore le vote",
+  "Start {topic}": "Commencer {topic}",
+  "Choose again": "Choisir à nouveau",
+  "While the round has not started": "Tant que la manche n'a pas commencé",
+  "Choose": "Choisir",
+  "Choose the topic yourself": "Choisir le thème vous-même",
+  "Choose this topic": "Choisir ce thème",
+  "Back to the wheel": "Retour à la roue",
+  "Back to the vote": "Retour au vote",
+  "Shortcut: →": "Raccourci : →",
+  "vote": "vote",
+  "votes": "votes",
+  // The cross on a first name of the waiting screen (src/pages/Lobby.tsx).
+  "Remove this name": "Retirer ce prénom",
+};

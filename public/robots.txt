@@ -1,0 +1,3 @@
+# This app has no public pages to index: sign-in, the app and the vote pages stay out of search results.
+User-agent: *
+Disallow: /

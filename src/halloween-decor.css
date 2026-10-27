@@ -1,0 +1,70 @@
+/* The Halloween decor of a presentation (src/halloween-decor.tsx, src/decor.ts). The colors come with the decor's brand
+   (cream text, pumpkin orange accent); this file adds the night ground, the scene behind the content and the phones'
+   touches. Nothing here changes a size or a place of the screen's own content. Every animation is inside
+   prefers-reduced-motion: no-preference. */
+
+/* Big screen: the scene sits behind everything the screen draws (z-index -1 inside the screen's own stacking context). */
+.present.decor-halloween {
+  position: relative;
+  isolation: isolate;
+  --ground: #120e30;
+  background: radial-gradient(70vw 55vh at 56% -12%, #2c2468 0%, transparent 70%), radial-gradient(60vw 50vh at 104% 112%, #34173f 0%, transparent 66%), radial-gradient(50vw 45vh at -6% 112%, #26123c 0%, transparent 66%), linear-gradient(180deg, #17123a 0%, #100d2a 58%, #0b0920 100%) !important;
+}
+.hwd-scene { --hwd-x: 56%; position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.hwd-scene .is-off { visibility: hidden; }
+.hwd-scene .is-gone { display: none; }
+.hwd-scene svg { display: block; }
+.hwd-stars { opacity: .7; -webkit-mask-image: linear-gradient(#000 0, #000 18%, transparent 48%); mask-image: linear-gradient(#000 0, #000 18%, transparent 48%); }
+
+/* The moon in the middle of the top bar, the bats around it (the same row, never over the title) */
+.hwd-scene { --hwd-mid: calc(clamp(12px, 2.2vh, 28px) + var(--top-h, 48px) / 2); --hwd-u: var(--top-h, 48px); }
+.hwd-piece { position: absolute; }
+.hwd-moon { --hw-halo: .3; width: calc(var(--hwd-u) * 2.5); left: var(--hwd-x); top: var(--hwd-mid); translate: -50% -50%; }
+.hwd-bat { width: calc(var(--hwd-u) * .78); top: var(--hwd-mid); translate: -50% -50%; }
+.hwd-fly { display: block; }
+.hwd-b1 { width: calc(var(--hwd-u) * .9); left: calc(var(--hwd-x) - var(--hwd-u) * 2.4); margin-top: calc(var(--hwd-u) * .08); }
+.hwd-b2 { left: calc(var(--hwd-x) + var(--hwd-u) * 2.1); margin-top: calc(var(--hwd-u) * -.14); }
+.hwd-b3 { width: calc(var(--hwd-u) * .54); left: calc(var(--hwd-x) + var(--hwd-u) * 3.75); margin-top: calc(var(--hwd-u) * .16); }
+.hwd-b1 .hwd-fly { rotate: -8deg; }
+.hwd-b2 .hwd-fly { rotate: 9deg; }
+.hwd-b3 .hwd-fly { rotate: -4deg; }
+
+/* Pumpkins in the bottom left corner, the middle one carved and lit (placed by the script) */
+.hwd-patch { --hwd-pk: clamp(40px, 8.4vh, 96px); position: absolute; bottom: 0; display: flex; align-items: flex-end; }
+.hwd-patch.is-left { left: var(--gutter, 24px); }
+.hwd-patch > svg { flex: none; }
+.hwd-p1 { width: calc(var(--hwd-pk) * .74); }
+.hwd-p2 { width: var(--hwd-pk); margin-left: calc(var(--hwd-pk) * -.12); }
+.hwd-p3 { width: calc(var(--hwd-pk) * .56); margin-left: calc(var(--hwd-pk) * -.1); }
+.hwd-scene .hw-ground { fill: #000; opacity: .45; }
+
+/* Orange accents that stay AA: the join card's heading in a deeper orange on white (5.2:1), the rest from the brand */
+.present.decor-halloween .join-title, .present.decor-halloween .lobby-k { color: #c2410c; }
+.present.decor-halloween .present-foot { border-top-color: #ff8a3d29; }
+
+/* Phones: the page at night, a few stars at the top, a pumpkin beside the logo, two bats in the header */
+body.decor-halloween { background: linear-gradient(180deg, #1b1442 0%, #120e30 55%, #0b0920 100%) fixed !important; }
+body.decor-halloween::before { content: ""; position: fixed; inset: 0 0 auto; z-index: -1; height: 150px; pointer-events: none; opacity: .65; background: radial-gradient(circle at 12% 18%, #f6eedbb3 0 1.2px, transparent 1.9px), radial-gradient(circle at 63% 9%, #f6eedb99 0 1px, transparent 1.7px), radial-gradient(circle at 81% 41%, #f6eedb8c 0 1.3px, transparent 2px), radial-gradient(circle at 34% 64%, #f6eedb80 0 1px, transparent 1.7px), radial-gradient(circle at 92% 82%, #f6eedb99 0 1.1px, transparent 1.9px); background-size: 220px 180px; -webkit-mask-image: linear-gradient(#000 30%, transparent); mask-image: linear-gradient(#000 20%, transparent 90%); }
+/* The header pills keep their look on an opaque night ground, so no star shows through them */
+body.decor-halloween .vote .top .step-pill, body.decor-halloween .vote .top .lang-pick { background: linear-gradient(var(--surface), var(--surface)) #1b1442; }
+.hwd-mark { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.hwd-mark > :first-child { min-width: 0; }
+.hwd-mark { position: relative; }
+.hwd-mark-pumpkin { flex: none; width: 30px; margin-bottom: 2px; }
+/* The bats fly out of the pumpkin, in the page's top margin (over nothing the phone shows) */
+.hwd-phone-bats { position: absolute; right: -30px; top: -19px; display: flex; align-items: flex-start; gap: 6px; pointer-events: none; }
+.hwd-phone-bats .hwd-fly:first-child { width: 22px; rotate: -10deg; }
+.hwd-phone-bats .hwd-fly:last-child { width: 15px; margin-top: 7px; rotate: 12deg; }
+.hwd-phone-bats svg { display: block; width: 100%; }
+
+/* Slow flight: each bat drifts around its spot and beats its wings */
+@media (prefers-reduced-motion: no-preference) {
+  .hwd-fly { animation: hwd-fly 15s ease-in-out infinite; }
+  .hwd-fly svg { transform-origin: 50% 40%; animation: hwd-flap 1.1s ease-in-out infinite alternate; }
+  .hwd-b2 .hwd-fly { animation-duration: 18s; animation-delay: -6s; }
+  .hwd-b3 .hwd-fly { animation-duration: 13s; animation-delay: -3s; }
+  .hwd-b3 .hwd-fly svg, .hwd-phone-bats .hwd-fly:last-child svg { animation-duration: .9s; }
+  .hwd-phone-bats .hwd-fly:last-child { animation-duration: 17s; animation-delay: -7s; }
+}
+@keyframes hwd-fly { 0%, 100% { translate: 0 0; } 25% { translate: 34% -10%; } 50% { translate: 6% 10%; } 75% { translate: -34% -4%; } }
+@keyframes hwd-flap { from { scale: 1 1; } to { scale: 1 .74; } }

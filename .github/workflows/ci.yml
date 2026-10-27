@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # No Cloudflare login here: no remote bindings (Workers AI).
+      HOPVOTE_LOCAL_ONLY: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npx vite build
+
+  test:
+    name: API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HOPVOTE_LOCAL_ONLY: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run setup
+      # Email links come back in the answers, as the tests expect.
+      - run: sed -i 's/^MAIL_DEV=$/MAIL_DEV=1/' .dev.vars
+      - name: Start the dev server
+        run: |
+          npm run dev > dev.log 2>&1 &
+          for i in $(seq 1 90); do curl -sf http://localhost:5180/api/health > /dev/null && exit 0; sleep 2; done
+          cat dev.log
+          exit 1
+      - run: npm test
+      - name: Dev server log
+        if: failure()
+        run: cat dev.log

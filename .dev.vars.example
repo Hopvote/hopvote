@@ -1,0 +1,16 @@
+# Local settings and secrets for `npm run dev`. npm run setup copies this file to .dev.vars (never commit it).
+# Values here override the "vars" of wrangler.jsonc. In production, set secrets with: npx wrangler secret put NAME
+# Empty lines are fine: each feature turns itself off without its setting. Restart npm run dev after a change.
+
+# The address of the links in emails.
+PUBLIC_URL=http://localhost:5180
+# Resend API key (secret). Empty: email links are printed in the dev server log instead.
+RESEND_API_KEY=
+# Sender of every email, on a domain verified in Resend.
+MAIL_FROM=
+# "1": sign-ups confirm their email first.
+MAIL_READY=
+# "1": email links are printed in the log and count as sent, and sign-ups wait for them. npm test needs it.
+MAIL_DEV=
+# "Sign in with Google" OAuth client id. Empty hides the button.
+GOOGLE_CLIENT_ID=

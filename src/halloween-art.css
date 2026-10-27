@@ -1,0 +1,31 @@
+/* Halloween drawings (src/halloween-art.tsx), in one palette: pumpkin #e8552e, light #ff8a5c, ribs #c2421f, olive
+   stems, navy, cream. Sizes and positions come from the caller. Every animation is inside
+   prefers-reduced-motion: no-preference. */
+:is(.hw-pumpkin, .hw-bat, .hw-moon, .hw-web, .hw-ghost, .hw-sparkle) { overflow: visible; }
+.hw-body { fill: #e8552e; }
+.hw-shine { fill: #ff8a5c; opacity: .7; }
+.hw-ribs { stroke: #c2421f; }
+.hw-gloss { stroke: #ffd2b8; opacity: .55; }
+.hw-stem { fill: #6b7a35; stroke: #6b7a35; }
+.hw-ground { fill: #070a22; opacity: .45; }
+.hw-pumpkin:not(.is-lit) .hw-face { fill: #151a3d; stroke: #151a3d; }
+.hw-bat-wing { fill: #343c7d; stroke: #f6eedb; stroke-opacity: .7; stroke-width: 1; stroke-linejoin: round; }
+.hw-bat-bones { stroke: #f6eedb; stroke-opacity: .22; stroke-width: .8; }
+.hw-bat-eye { fill: #ffd98a; }
+.hw-sparkle { display: block; fill: #f6eedb; opacity: .75; }
+.hw-web { stroke: currentColor; stroke-width: 1; stroke-linecap: round; }
+.hw-web-spider { fill: currentColor; stroke: currentColor; }
+.hw-ghost-shadow { fill: #000; opacity: .35; }
+
+/* Stars: small dots on two repeating tiles */
+.hw-stars { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 12% 18%, #f6eedbb3 0 1.3px, transparent 2px), radial-gradient(circle at 63% 9%, #f6eedb99 0 1px, transparent 1.8px), radial-gradient(circle at 81% 41%, #f6eedb8c 0 1.4px, transparent 2.2px), radial-gradient(circle at 34% 64%, #f6eedb80 0 1px, transparent 1.8px), radial-gradient(circle at 92% 82%, #f6eedb99 0 1.2px, transparent 2px), radial-gradient(circle at 48% 37%, #f6eedb73 0 .9px, transparent 1.6px), radial-gradient(circle at 22% 86%, #f6eedb66 0 .9px, transparent 1.6px); background-size: 340px 280px, 340px 280px, 340px 280px, 340px 280px, 340px 280px, 340px 280px, 220px 190px; }
+
+/* The carved pumpkins' candles flicker, slowly and softly; the sparkles twinkle */
+@media (prefers-reduced-motion: no-preference) {
+  .hw-pumpkin.is-lit .hw-halo { animation: hw-candle 3.4s ease-in-out infinite; }
+  .hw-pumpkin.is-lit .hw-face { animation: hw-flame 3.4s ease-in-out infinite; }
+  .hw-sparkle { animation: hw-twinkle 5.2s ease-in-out infinite; }
+}
+@keyframes hw-candle { 0%, 100% { opacity: 1; } 30% { opacity: .72; } 46% { opacity: .92; } 70% { opacity: .66; } }
+@keyframes hw-flame { 0%, 100% { opacity: 1; } 30% { opacity: .84; } 46% { opacity: .96; } 70% { opacity: .8; } }
+@keyframes hw-twinkle { 0%, 100% { opacity: .75; scale: 1; } 50% { opacity: .3; scale: .7; } }

@@ -1,0 +1,133 @@
+/* The quiz leaderboard's animated views (src/podium.tsx). The base rules are the end of each animation: a screen drawn late,
+   a picture of the page or reduced motion shows the full result. --t0 (negative) carries an animation on where it was. */
+
+.pd-view { display: flex; flex-direction: column; gap: clamp(14px, 2.4vh, 28px); min-height: 0; width: 100%; }
+.present .pd-view { flex: 1; }
+.pd-meta { display: flex; align-items: center; gap: .45em; margin: 0; color: var(--muted); font-size: var(--fs-meta, clamp(14px, 1.2vw, 22px)); font-weight: 700; line-height: 1.2; }
+.pd-meta svg { flex: none; width: 1.05em; height: 1.05em; color: var(--accent); }
+.pd-title { margin: 0; font-size: var(--fs-title, clamp(28px, 3.5vw, 64px)); font-weight: 800; line-height: 1.1; letter-spacing: -0.022em; }
+
+/* Between questions: the top 5 */
+.sd { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(8px, 1.4vh, 14px); width: 100%; --t0: 0ms; }
+.sd-row {
+  display: grid;
+  grid-template-columns: clamp(40px, 3.4vw, 54px) auto minmax(0, 1fr) clamp(48px, 4vw, 64px) clamp(70px, 7vw, 110px) clamp(90px, 9vw, 150px);
+  align-items: center;
+  gap: clamp(10px, 1.2vw, 18px);
+  padding: clamp(10px, 1.4vh, 16px) clamp(14px, 1.6vw, 24px);
+  border-radius: 18px;
+  /* Opaque: rows pass over each other while they move. */
+  background: color-mix(in srgb, var(--text) 7%, var(--ground, #141a3c));
+  border: 1px solid var(--line);
+  font-size: var(--fs-item, clamp(18px, 1.9vw, 30px));
+  animation: sd-move 2s cubic-bezier(0.3, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--t0) + var(--i) * 40ms);
+}
+.sd-row.first { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+@keyframes sd-move {
+  0% { opacity: 0; transform: translateY(calc(var(--from) * (100% + 12px))); }
+  16%, 32% { opacity: 1; transform: translateY(calc(var(--from) * (100% + 12px))); }
+  78%, 100% { opacity: 1; transform: none; }
+}
+.sd-rank { display: grid; place-items: center; width: clamp(36px, 3vw, 48px); height: clamp(36px, 3vw, 48px); border-radius: 12px; background: var(--bar); font-weight: 900; font-variant-numeric: tabular-nums; }
+.sd-rank.r1 { background: #ffc53d; color: #5c3d00; }
+.sd-rank.r2 { background: #d9dce6; color: #2a2a40; }
+.sd-rank.r3 { background: #e8b389; color: #5a2d0c; }
+.sd-buddy { flex: none; width: clamp(38px, 3.4vw, 52px) !important; height: clamp(38px, 3.4vw, 52px) !important; }
+.sd-name { font-weight: 800; }
+.sd-move { display: inline-flex; align-items: center; gap: 2px; justify-self: end; font-size: 0.72em; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; animation: sd-pop 2s ease backwards; animation-delay: calc(var(--t0) + 1500ms); }
+
+.sd-gain { justify-self: end; font-size: 0.72em; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; animation: sd-pop 2s ease backwards; animation-delay: calc(var(--t0) + 600ms); }
+.sd-score { justify-self: end; font-weight: 900; font-variant-numeric: tabular-nums; }
+@keyframes sd-pop { 0% { opacity: 0; transform: translateY(8px) scale(0.9); } 14%, 100% { opacity: 1; transform: none; } }
+
+/* The final podium: 2nd, 1st, 3rd side by side, the rest of the top 10 next to it */
+.pd { flex: 1; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; gap: clamp(20px, 3vw, 56px); width: 100%; min-height: 0; --t0: 0ms; }
+.pd.alone { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+.pd.alone .pd-stage { width: min(100%, 900px); }
+/* Always read as a podium, in every language: 2nd on the left, 1st in the middle, 3rd on the right (names keep their own direction). */
+.pd-stage { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: clamp(10px, 1.2vw, 18px); min-width: 0; direction: ltr; }
+.pd-col.p2 { grid-column: 1; }
+.pd-col.p1 { grid-column: 2; }
+.pd-col.p3 { grid-column: 3; }
+.pd-name { unicode-bidi: plaintext; }
+.pd-col { display: flex; flex-direction: column; align-items: stretch; gap: 12px; min-width: 0; }
+.pd-who { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; text-align: center; animation: pd-who 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards; animation-delay: calc(var(--t0) + var(--d) + 650ms); }
+.p1 .pd-who { animation-delay: calc(var(--t0) + var(--d) + 850ms); }
+@keyframes pd-who { from { opacity: 0; transform: translateY(16px) scale(0.85); } }
+.pd-buddy { flex: none; }
+.pd-name { max-width: 100%; font-size: clamp(18px, 1.8vw, 28px); font-weight: 800; }
+.r1 .pd-name { font-size: clamp(22px, 2.2vw, 34px); font-weight: 900; }
+.pd-score { font-size: clamp(16px, 1.5vw, 24px); font-weight: 900; color: var(--muted); font-variant-numeric: tabular-nums; }
+.r1 .pd-score { color: var(--text); }
+.pd-bar { position: relative; display: flex; justify-content: center; padding-top: clamp(10px, 1.6vh, 18px); border-radius: 18px 18px 6px 6px; background: var(--surface); border: 1px solid var(--line); border-bottom: 0; transform-origin: bottom; animation: pd-bar 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--t0) + var(--d)); }
+/* The steps fit the space left under the names (the podium is a size container on a big screen): 1st, then 72% and 50%. */
+.pd-stage { --pd-h: clamp(150px, 36vh, 400px); }
+@media not ((max-width: 760px) and (orientation: portrait)) {
+  .present .pd { container-type: size; }
+  .present .pd-stage { --pd-h: clamp(36px, min(36vh, 100cqh - 190px), 400px); }
+}
+.r1 .pd-bar { height: var(--pd-h); border-top: 4px solid var(--accent); }
+.p1 .pd-bar { animation-duration: 0.9s; }
+.r2 .pd-bar { height: calc(var(--pd-h) * 0.72); }
+.r3 .pd-bar { height: calc(var(--pd-h) * 0.5); }
+/* A short window (a slide, a meeting panel, a small projector): smaller faces and names leave room for the steps. */
+@media (max-height: 560px) and (orientation: landscape) {
+  .present .pd-buddy { width: 44px !important; height: 44px !important; }
+  .present .pd-who { gap: 2px; }
+  .present .pd-name { font-size: 16px; }
+  .present .r1 .pd-name { font-size: 18px; }
+  .present .pd-score { font-size: 14px; }
+  .present .pd-stage { --pd-h: clamp(28px, min(36vh, 100cqh - 112px), 400px); }
+  .present .pd-rank { font-size: 28px; }
+}
+@keyframes pd-bar { from { transform: scaleY(0); } }
+.pd-rank { font-size: clamp(34px, 4.4vw, 72px); font-weight: 900; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; animation: pd-who 0.4s ease backwards; animation-delay: calc(var(--t0) + var(--d) + 350ms); }
+.r1 .pd-rank { color: var(--accent); }
+.pd-rest { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(6px, 1vh, 10px); align-self: center; min-width: 0; }
+.pd-rest li { display: grid; grid-template-columns: 36px auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: clamp(6px, 1vh, 10px) 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font-size: clamp(16px, 1.4vw, 22px); animation: pd-rest 0.4s ease backwards; animation-delay: calc(var(--t0) + 5300ms + var(--i) * 90ms); }
+@keyframes pd-rest { from { opacity: 0; transform: translateY(10px); } }
+.pd-rest-rank { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: var(--bar); font-weight: 900; font-size: 0.85em; font-variant-numeric: tabular-nums; }
+.pd-rest-name { font-weight: 700; }
+.pd-rest strong { font-weight: 900; font-variant-numeric: tabular-nums; }
+
+/* Confetti over the winner, as in the launch animation: shown only while it plays */
+.pd-confetti { position: absolute; left: 50%; top: 30%; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.pd-confetti b { position: absolute; left: 0; top: 0; width: 12px; height: 12px; margin: -6px; border-radius: 3px; background: var(--accent); opacity: 0; animation: pd-burst 2.6s both; animation-delay: calc(var(--t0) + var(--d) + 850ms); }
+.pd-confetti b:nth-of-type(odd) { background: #f6f4ef; }
+.pd-confetti b.late { width: 9px; height: 16px; animation-delay: calc(var(--t0) + var(--d) + 1200ms); }
+@keyframes pd-burst {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0); animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1); }
+  30% { opacity: 1; transform: translate(var(--x), var(--y)) rotate(calc(var(--r) / 2)); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
+  88% { opacity: 1; transform: translate(var(--x), calc(var(--y) + 34vmin)) rotate(var(--r)); }
+  100% { opacity: 0; transform: translate(var(--x), calc(var(--y) + 38vmin)) rotate(var(--r)); }
+}
+.still .pd-confetti { display: none; }
+
+/* A phone's own place */
+.my-place { position: relative; display: flex; align-items: center; gap: 14px; margin: 4px 0 14px; padding: 14px 16px; border-radius: 18px; background: var(--surface); border: 1.5px solid var(--accent); animation: rise 0.35s ease both; --t0: 0ms; --d: -850ms; }
+.my-place.none { display: block; border: 1px solid var(--line); color: var(--muted); font-weight: 700; text-align: center; }
+.my-place-icon { flex: none; color: var(--muted); }
+.my-place.p1 .my-place-icon { color: #e0a100; }
+.my-place.p2 .my-place-icon { color: #8a90a6; }
+.my-place.p3 .my-place-icon { color: #c27a45; }
+.my-place-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.my-place-text strong { font-size: 18px; font-weight: 800; }
+.my-place-text small { display: flex; align-items: baseline; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.my-place-text em { font-style: normal; font-weight: 800; color: var(--accent); }
+.my-place .pd-confetti { top: 50%; left: 30px; }
+.my-place .pd-confetti b { width: 8px; height: 8px; margin: -4px; }
+.my-place .pd-confetti b:nth-of-type(odd) { background: #ffc53d; }
+.my-place.still .pd-confetti { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-row, .sd-move, .sd-gain, .pd-who, .pd-bar, .pd-rank, .pd-rest li, .my-place { animation: none; }
+  .pd-confetti { display: none; }
+}
+.still .sd-row, .still .sd-move, .still .sd-gain, .still.pd .pd-who, .still.pd .pd-bar, .still.pd .pd-rank, .still.pd .pd-rest li { animation: none; }
+
+@media (max-width: 760px) {
+  .pd { grid-template-columns: minmax(0, 1fr); }
+  .sd-row { grid-template-columns: 36px auto minmax(0, 1fr) auto auto; }
+  .sd-gain { display: none; }
+}

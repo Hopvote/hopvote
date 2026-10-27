@@ -1,0 +1,55 @@
+// Example Cloudflare settings for your own copy of Hopvote. npm run setup copies it to wrangler.jsonc, which runs on
+// your machine as is. To deploy: npx wrangler d1 create hopvote-db --binding DB (it writes the database id below),
+// set PUBLIC_URL, then npm run deploy.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "hopvote",
+  // Only if your Cloudflare login has several accounts:
+  // "account_id": "YOUR_ACCOUNT_ID",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "vars": {
+    // Your public address, no trailing slash (https://your-domain, or your workers.dev address). Needed for the
+    // links in sign-up, password and team emails.
+    "PUBLIC_URL": "",
+    // Sender of every email, on a domain verified in Resend, like "Polls <hello@your-domain>". Key: wrangler secret put RESEND_API_KEY.
+    "MAIL_FROM": "",
+    // "1" once your domain is verified in Resend: sign-ups then confirm their email. Keep "0" without Resend.
+    "MAIL_READY": "0",
+    // Public "Sign in with Google" OAuth client id (Google Cloud console). Empty hides the button.
+    "GOOGLE_CLIENT_ID": ""
+  },
+  // Your own domain (optional). Without routes, the Worker answers on its workers.dev address.
+  // "routes": [{ "pattern": "polls.example.com", "custom_domain": true }],
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/fonts/*"]
+  },
+  // Workers AI translates questions for participants and helps write them; it pauses once the daily budget in worker/ai-budget.ts is spent.
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hopvote-db",
+      "database_id": "YOUR_D1_DATABASE_ID",
+      // The database on your machine (npm run dev, npm run setup) keeps this name, whatever the id above.
+      "preview_database_id": "hopvote-local",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "ROOMS", "class_name": "Room" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+  // Free Cloudflare rate limits, counted per address and per Cloudflare location.
+  "ratelimits": [
+    { "name": "AUTH_LIMIT", "namespace_id": "4101", "simple": { "limit": 20, "period": 60 } },
+    { "name": "WRITE_LIMIT", "namespace_id": "4102", "simple": { "limit": 60, "period": 60 } }
+  ],
+  "observability": { "enabled": true },
+  // On the Workers Paid plan you may cap the CPU time of a request (30 s by default), for example:
+  // "limits": { "cpu_ms": 5000 },
+  // Once a day: the clean-up of expired rows and unused images (worker/cleanup.ts).
+  "triggers": { "crons": ["23 3 * * *"] }
+}
